@@ -1,0 +1,193 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+
+class player {
+	int id = -1;
+	std::vector<unsigned int> cards;
+	friend std::istream & operator >> (std::istream & is, player & p);
+	friend std::ostream & operator << (std::ostream & os, const player & p);
+
+	public:
+		int peek() const {
+			if(cards.empty()) {
+				return -1;
+			}
+
+			return cards[0];
+		}
+
+		bool lost() const {
+			return cards.empty();
+		}
+
+		void addCard(unsigned int card) {
+			cards.push_back(card);
+		}
+
+		long cardCount() const {
+			return cards.size();
+		}
+
+		unsigned int pop() {
+			unsigned int res = peek();
+			cards.erase(cards.begin());
+			return res;
+		}
+
+		long getScore() const {
+			long score = 0;
+			for(int i = 1; i <= cards.size(); ++i) {
+				score += i * cards[cards.size() - i];
+			}
+
+			return score;
+		}
+};
+
+std::ostream & operator << (std::ostream & os, const player & p) {
+	os << p.id << ": ";
+	for(const unsigned int card : p.cards) {
+		os << card << ", ";
+	}
+
+	return os;
+}
+
+std::istream & operator >> (std::istream & is, player & p) {
+	is.ignore(7, ' ');// "Player "
+	player result;
+	if(!(is >> result.id)) {
+		return is;
+	}
+
+	is.ignore(2, '\n');// ":\n"
+	for(std::string line; std::getline(is, line) && !line.empty();) {
+		result.cards.push_back(std::stoi(line));
+	}
+
+	p = result;
+	return is;
+}
+
+static inline long combat(std::vector<player> players) {
+	for(int actives; (actives = std::count_if(players.begin(), players.end(), [](const player & p) -> bool { return !p.lost(); })) > 1;) {
+		int pid = -1;
+		int cid = -1;
+		for(int i = 0; i < players.size(); ++i) {
+			if(players[i].lost()) {
+				continue;
+			}
+
+			if(players[i].peek() > cid) {
+				pid = i;
+				cid = players[i].peek();
+			}
+		}
+
+		players[pid].addCard(players[pid].pop());
+		for(int i = 0; i < players.size(); ++i) {
+			if(i == pid) {
+				continue;
+			}
+
+			players[pid].addCard(players[i].pop());
+		}
+	}
+
+	for(const player & p : players) {
+		if(p.lost()) {
+			continue;
+		}
+
+		return p.getScore();
+	}
+
+	return -1;
+}
+
+static inline long recursiveCombat(player p0, player p1) {
+	while(true) {
+		// TODO - check for previous states
+		if(p1.peek() < p1.cardCount() - 1 || p0.peek() < p0.cardCount() - 1) {
+			if(p1.peek() > p0.peek()) {
+				p1.addCard(p1.pop());
+				p1.addCard(p0.pop());
+			} else {
+				p0.addCard(p0.pop());
+				p0.addCard(p1.pop());
+			}
+		} else {
+			// TODO - recurse
+			unsigned int c0 = p0.pop();
+			unsigned int c1 = p1.pop();
+		}
+		
+		if(p0.lost()) {
+			return p1.getScore();
+		} else if(p1.lost()) {
+			return p0.getScore();
+		}
+	}
+}
+
+static inline long recursiveCombat(std::vector<player> players) {
+	for(int actives; (actives = std::count_if(players.begin(), players.end(), [](const player & p) -> bool { return !p.lost(); })) > 1;) {
+		// if same configuration happened before then return score of player 1
+		int pid = -1;
+		int cid = -1;
+		for(int i = 0; i < players.size(); ++i) {
+			if(players[i].lost()) {
+				continue;
+			}
+
+			if(players[i].peek() > cid) {
+				pid = i;
+				cid = players[i].peek();
+			}
+		}
+
+		players[pid].addCard(players[pid].pop());
+		for(int i = 0; i < players.size(); ++i) {
+			if(i == pid) {
+				continue;
+			}
+
+			players[pid].addCard(players[i].pop());
+		}
+	}
+
+	for(const player & p : players) {
+		if(p.lost()) {
+			continue;
+		}
+
+		return p.getScore();
+	}
+
+	return -1;
+}
+
+int main() {
+	std::ifstream file("input.txt");
+	if(!file.is_open()) {
+		std::cout << "Could not open file!" << std::endl;
+		return 1;
+	}
+
+	std::vector<player> players;
+	for(player p; file >> p;) {
+		players.push_back(p);
+		file.ignore(10, 'P');
+	}
+
+	file.close();
+
+
+	std::cout << "result 1: " << combat(players) << std::endl;
+	//std::cout << "result 2: " << result1 << std::endl;
+
+	return 0;
+}
+
