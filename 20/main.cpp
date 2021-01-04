@@ -98,9 +98,9 @@ int main() {
 		}
 	}
 
-	long result1 = ids[0];
-	for(int i = 1; i < ids.size(); ++i) {
-		result1 *= ids[i];
+	long result1 = 1;
+	for(const int id : ids) {
+		result1 *= id;
 	}
 
 	std::cout << "result 1: " << result1 << std::endl;
@@ -108,10 +108,8 @@ int main() {
 	// From the text I'll assume, that it is more than one seamonster
 	// A seamonster has exactly 15 hashes
 	// Let's use the total amount of hashes (without the borders) to construct possible solutions and input those into the website whenever our "try again in X minutes" is over
-	// I'll stop increasing the stop condition of the loop, when I find the correct solution
-	for(int i = 2; i <= 22; ++i) {
-		std::cout << "possible result 2: " << (hashes - i * 15) << std::endl;
-	}
+	// I'll stop increasing the multiplicator, when I find the correct solution
+	std::cout << "result 2: " << (hashes - 22 * 15) << std::endl;
 
 	return 0;
 }

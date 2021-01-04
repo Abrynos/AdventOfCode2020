@@ -8,7 +8,7 @@ int main() {
 		std::cout << "Could not open file!" << std::endl;
 		return 1;
 	}
-	
+
 	int hPos = 0;
 	int vPos = 0;
 	int orientation = 0;

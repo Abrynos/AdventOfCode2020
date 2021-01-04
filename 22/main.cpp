@@ -30,50 +30,50 @@ namespace std {
 }
 
 class player {
-	int id = -1;
-	std::vector<unsigned int> cards;
-	friend std::istream & operator >> (std::istream & is, player & p);
+	private:
+		int id = -1;
+		std::vector<unsigned int> cards;
+		friend std::istream & operator >> (std::istream & is, player & p);
 
-public:
-	player() { }
-	player(const player & p, unsigned int n) {
-		id = p.id;
-		for(int i = 1; i <= n; ++i) {
-			cards.push_back(p.cards[i]);
+	public:
+		player() { }
+		player(const player & p, unsigned int n) {
+			id = p.id;
+			for(int i = 1; i <= n; ++i) {
+				cards.push_back(p.cards[i]);
+			}
 		}
-	}
-
-	int getId() const {
-		return id;
-	}
-	bool lost() const {
-		return cards.empty();
-	}
-	unsigned int peek() const {
-		return cards[0];
-	}
-	void addCard(unsigned int card) {
-		cards.push_back(card);
-	}
-	long countCards() const {
-		return cards.size();
-	}
-	unsigned int pop() {
-		unsigned int res = peek();
-		cards.erase(cards.begin());
-		return res;
-	}
-	long getScore() const {
-		long score = 0;
-		for(int i = 1; i <= cards.size(); ++i) {
-			score += i * cards[cards.size() - i];
+		int getId() const {
+			return id;
 		}
+		bool lost() const {
+			return cards.empty();
+		}
+		unsigned int peek() const {
+			return cards[0];
+		}
+		void addCard(unsigned int card) {
+			cards.push_back(card);
+		}
+		long countCards() const {
+			return cards.size();
+		}
+		unsigned int pop() {
+			unsigned int res = peek();
+			cards.erase(cards.begin());
+			return res;
+		}
+		long getScore() const {
+			long score = 0;
+			for(int i = 1; i <= cards.size(); ++i) {
+				score += i * cards[cards.size() - i];
+			}
 
-		return score;
-	}
-	std::vector<unsigned int> getCards() const {
-		return cards;
-	}
+			return score;
+		}
+		std::vector<unsigned int> getCards() const {
+			return cards;
+		}
 };
 
 std::istream & operator >> (std::istream & is, player & p) {

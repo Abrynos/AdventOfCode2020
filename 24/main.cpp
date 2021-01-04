@@ -176,9 +176,9 @@ struct dir {
 template<direction d>
 struct rulegenerator {
 	template<typename Iterator>
-	static qi::rule<Iterator, std::pair<int, int>, qi::space_type> rule() {
-		return qi::lit(dir<d>::str)[qi::_val = dir<d>::posi];
-	}
+		static qi::rule<Iterator, std::pair<int, int>, qi::space_type> rule() {
+			return qi::lit(dir<d>::str)[qi::_val = dir<d>::posi];
+		}
 };
 
 #define DIR(d, x, y)\

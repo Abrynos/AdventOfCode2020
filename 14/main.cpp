@@ -3,6 +3,7 @@
 #include <sstream>
 #include <bitset>
 #include <map>
+
 #include <boost/spirit/include/phoenix.hpp>
 #include <boost/spirit/include/qi.hpp>
 
@@ -90,10 +91,17 @@ struct Interpreter : qi::grammar<Iterator, qi::space_type> {
 				maskset
 				| memset;
 			memset =
-				qi::lit("mem") >> "[" >> qi::long_long[qi::_a = qi::_1] >> "]" >> "=" >> qi::long_long[ph::bind(&setValue, qi::_a, qi::_1)];
+				qi::lit("mem")
+				>> "["
+				>> qi::long_long[qi::_a = qi::_1]
+				>> "]"
+				>> "="
+				>> qi::long_long[ph::bind(&setValue, qi::_a, qi::_1)];
 			maskset =
-				qi::lit("mask")[ph::bind(&clearMasks)] >> "=" >> qi::repeat(VALUE_LENGTH)[
-					qi::char_("01X")[ph::bind(&updateMasks, qi::_1)]
+				qi::lit("mask")[ph::bind(&clearMasks)]
+				>> "="
+				>> qi::repeat(VALUE_LENGTH)[
+				qi::char_("01X")[ph::bind(&updateMasks, qi::_1)]
 				];
 		}
 };

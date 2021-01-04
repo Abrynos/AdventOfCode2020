@@ -8,7 +8,7 @@ int main() {
 		std::cout << "Could not open file!" << std::endl;
 		return 1;
 	}
-	
+
 	int min;
 	int max;
 	char ch;

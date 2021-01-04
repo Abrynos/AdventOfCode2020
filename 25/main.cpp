@@ -3,7 +3,6 @@
 
 typedef size_t encryptionkey;
 
-
 template<unsigned long divisor>
 struct DoorAttacker {
 	private:

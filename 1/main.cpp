@@ -8,7 +8,7 @@ int main() {
 		std::cout << "Could not open file!" << std::endl;
 		return 1;
 	}
-	
+
 	std::vector<int> numbers;
 	for(int n; file >> n;) {
 		for(int i = 0; i < numbers.size(); ++i) {

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+
 #include <boost/spirit/include/phoenix.hpp>
 #include <boost/spirit/include/qi.hpp>
 
@@ -126,11 +127,10 @@ static bool startsWith(std::string s, std::string p) {
 }
 
 static long computeResult2(const std::vector<std::vector<ruledef>> & finalRules, const std::vector<int> & ticket) {
-	long result;
+	long result = 1;
 	int first = 0;
 	for(; !startsWith(finalRules[first][0].first, "departure"); ++first);
-	result = ticket[first];
-	for(++first; first < ticket.size(); ++first) {
+	for(; first < ticket.size(); ++first) {
 		if(startsWith(finalRules[first][0].first, "departure")) {
 			result *= ticket[first];
 		}
@@ -172,8 +172,8 @@ struct Validator : qi::grammar<Iterator, std::pair<int, long>, qi::space_type> {
 				]
 				>> "nearby tickets:"
 				>> (*ticket[
-					qi::_d += ph::bind(&getError, qi::_a, qi::_1),
-					ph::if_(ph::bind(&isValid, qi::_a, qi::_1))[// becuase the error is 0 if the value of the invalid field is 0 - cost me 2.5 hours
+						qi::_d += ph::bind(&getError, qi::_a, qi::_1),
+						ph::if_(ph::bind(&isValid, qi::_a, qi::_1))[// becuase the error is 0 if the value of the invalid field is 0 - cost me 2.5 hours
 						ph::bind(&restrict, qi::_b, qi::_1)
 					]
 				])[qi::_val = ph::construct<std::pair<int, long>>(qi::_d, ph::bind(&computeResult2, qi::_b, qi::_c))];

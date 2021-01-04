@@ -30,7 +30,7 @@ int main() {
 		std::cout << "Could not open file!" << std::endl;
 		return 1;
 	}
-	
+
 	std::vector<int> ratings(0);
 	for(int rating; file >> rating; ) {
 		ratings.push_back(rating);

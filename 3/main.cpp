@@ -45,9 +45,9 @@ int main() {
 
 	std::cout << "result 1: " << counts[1] << std::endl;
 
-	long res = counts[0];
-	for(int i = 1; i < counts.size(); ++i) {
-		res *= counts[i];
+	long res = 1;
+	for(const int count : counts) {
+		res += count;
 	}
 	std::cout << "result 2: " << res << std::endl;
 

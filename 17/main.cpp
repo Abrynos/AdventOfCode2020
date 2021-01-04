@@ -5,19 +5,18 @@
 #include <stdexcept>
 #include <vector>
 
-// hashing for int-vector
 namespace std {
     template <>
-    struct hash<std::vector<int>> {
-        size_t operator()(const vector<int>& v) const {
+	struct hash<std::vector<int>> {
+		size_t operator()(const vector<int>& v) const {
 			std::hash<int> hasher;
-        	size_t seed = 0;
-        	for (int i : v) {
-            	seed ^= hasher(i) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-        	}
-        	return seed;
-        }
-    };
+			size_t seed = 0;
+			for (int i : v) {
+    			seed ^= hasher(i) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+			}
+			return seed;
+		}
+	};
 }
 
 // compile time choosing between (x >= min && x <= max) and (x == min) if min and max are the same
