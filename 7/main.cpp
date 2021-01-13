@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <map>
-#include <set>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <algorithm>
 #include <utility>
@@ -30,9 +30,9 @@ static std::string readBagColor(std::istream & is) {
 	return result;
 }
 
-static std::map<std::string, int> containsCache;
+static std::unordered_map<std::string, int> containsCache;
 
-static int contains(const std::map<std::string, std::vector<std::pair<int, std::string>>> & info, const std::string & bag) {
+static int contains(const std::unordered_map<std::string, std::vector<std::pair<int, std::string>>> & info, const std::string & bag) {
 	auto res = containsCache.find(bag);
 	if(res != containsCache.end()) {
 		return res->second;
@@ -47,8 +47,8 @@ static int contains(const std::map<std::string, std::vector<std::pair<int, std::
 	return sum;
 }
 
-static std::set<std::string> canContain(const std::map<std::string, std::set<std::string>> & info, std::string x) {
-	std::set<std::string> result;
+static std::unordered_set<std::string> canContain(const std::unordered_map<std::string, std::unordered_set<std::string>> & info, std::string x) {
+	std::unordered_set<std::string> result;
 	for(const std::string & s : info.at(x)) {
 		result.insert(s);
 	}
@@ -62,7 +62,7 @@ int main() {
 		return 1;
 	}
 
-	std::map<std::string, std::vector<std::pair<int, std::string>>> res;
+	std::unordered_map<std::string, std::vector<std::pair<int, std::string>>> res;
 	for(std::string line; std::getline(file, line);) {
 		std::istringstream is(line);
 		std::string color = readBagColor(is);
@@ -79,19 +79,19 @@ int main() {
 
 	file.close();
 
-	std::map<std::string, std::set<std::string>> containedIn;
+	std::unordered_map<std::string, std::unordered_set<std::string>> containedIn;
 	for(const std::pair<std::string, std::vector<std::pair<int, std::string>>> & result : res) {
 		for(std::pair<int, std::string> p : result.second) {
-			std::map<std::string, std::set<std::string>>::iterator it = containedIn.find(p.second);
+			std::unordered_map<std::string, std::unordered_set<std::string>>::iterator it = containedIn.find(p.second);
 			if(it == containedIn.end()) {
-				containedIn[p.second] = std::set<std::string>();
+				containedIn[p.second] = std::unordered_set<std::string>();
 				it = containedIn.find(p.second);
 			}
 			it->second.insert(result.first);
 		}
  	}
 
-	std::set<std::string> outer = canContain(containedIn, "shinygold");
+	std::unordered_set<std::string> outer = canContain(containedIn, "shinygold");
 	std::cout << "result 1: " << outer.size() << std::endl;
 
 	std::cout << "result 2: " << contains(res, "shinygold") << std::endl;

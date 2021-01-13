@@ -1,15 +1,15 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <algorithm>
 
 #define MAX_LOWER 3
 #define HIGHER_THAN_MAX 3
 
-static std::map<int, long> cache;
+static std::unordered_map<int, long> cache;
 
-static long task2(const std::map<int, std::vector<int>> & sources, int current) {
+static long task2(const std::unordered_map<int, std::vector<int>> & sources, int current) {
 	auto cit = cache.find(current);
 	if(cit != cache.end()) {
 		return cit->second;
@@ -56,7 +56,7 @@ int main() {
 
 	std::cout << "result 1: " << (counts[1] * counts[3]) << std::endl;
 
-	std::map<int, std::vector<int>> compat;
+	std::unordered_map<int, std::vector<int>> compat;
 	for(int i = ratings.size() - 1; i >= 0; --i) {
 		int rating = ratings[i];
 		int j = i - 1;

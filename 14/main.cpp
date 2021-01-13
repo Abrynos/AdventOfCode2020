@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <bitset>
-#include <map>
+#include <unordered_map>
 
 #include <boost/spirit/include/phoenix.hpp>
 #include <boost/spirit/include/qi.hpp>
@@ -14,18 +14,12 @@ namespace ph = boost::phoenix;
 typedef std::bitset<VALUE_LENGTH> value;
 typedef std::bitset<36> address;
 
-struct Comparator {
-	bool operator() (const address & a1, const address & a2) const {
-		return a1.to_ulong() < a2.to_ulong();
-	}
-};
-
 static value orMask;
 static value andMask;
-static std::map<address, value, Comparator> memory;
+static std::unordered_map<address, value> memory;
 
 static address floatingMask;
-static std::map<address, value, Comparator> memory2;
+static std::unordered_map<address, value> memory2;
 
 static void clearMasks() {
 	orMask = 0;
