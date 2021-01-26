@@ -31,7 +31,8 @@ int main() {
 		numbers.push_back(n);
 	}
 
-	for(int n; file >> n;) {
+	int n;
+	while(file >> n) {
 		if(!isValidAtEnd(numbers, n)) {
 			break;
 		}
